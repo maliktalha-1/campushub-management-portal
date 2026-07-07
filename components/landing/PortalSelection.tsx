@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   GraduationCap,
@@ -13,7 +14,6 @@ import {
   Building2,
   BarChart3,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const portals = [
   {
@@ -26,7 +26,8 @@ const portals = [
       { icon: ClipboardCheck, text: "Assignments" },
       { icon: Bell, text: "Announcements" },
     ],
-    href: "/student/login",
+    loginHref: "/student/login",
+    registerHref: "/register?role=student",
   },
   {
     title: "Faculty",
@@ -38,7 +39,8 @@ const portals = [
       { icon: ClipboardCheck, text: "Attendance" },
       { icon: Bell, text: "Announcements" },
     ],
-    href: "/faculty/login",
+    loginHref: "/faculty/login",
+    registerHref: "/register?role=faculty",
   },
   {
     title: "Administrator",
@@ -50,7 +52,8 @@ const portals = [
       { icon: Building2, text: "Departments" },
       { icon: BarChart3, text: "Analytics" },
     ],
-    href: "/admin/login",
+    loginHref: "/admin/login",
+    registerHref: "/register?role=admin",
   },
 ];
 
@@ -77,10 +80,7 @@ const colors = {
 
 export default function PortalSelection() {
   return (
-    <section
-      id="portals"
-      className="bg-slate-50 py-24"
-    >
+    <section id="portals" className="bg-slate-50 py-24">
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 25 }}
@@ -115,9 +115,7 @@ export default function PortalSelection() {
                 key={portal.title}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: index * 0.15,
-                }}
+                transition={{ delay: index * 0.15 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
                 className={`rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-2xl ${style.hover}`}
@@ -132,37 +130,37 @@ export default function PortalSelection() {
                   {portal.title}
                 </h3>
 
-                <p className="mt-2 text-slate-600">
-                  {portal.subtitle}
-                </p>
+                <p className="mt-2 text-slate-600">{portal.subtitle}</p>
 
                 <div className="mt-8 space-y-4">
                   {portal.features.map((feature) => {
                     const FeatureIcon = feature.icon;
 
                     return (
-                      <div
-                        key={feature.text}
-                        className="flex items-center gap-3"
-                      >
-                        <FeatureIcon
-                          className={`h-5 w-5 ${style.text}`}
-                        />
-
-                        <span className="text-slate-700">
-                          {feature.text}
-                        </span>
+                      <div key={feature.text} className="flex items-center gap-3">
+                        <FeatureIcon className={`h-5 w-5 ${style.text}`} />
+                        <span className="text-slate-700">{feature.text}</span>
                       </div>
                     );
                   })}
                 </div>
 
-                <Button
-                  className={`mt-10 w-full text-white ${style.button}`}
-                >
-                  Continue
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <div className="mt-10 space-y-3">
+                  <Link
+                    href={portal.loginHref}
+                    className={`flex w-full items-center justify-center rounded-2xl px-5 py-3 font-semibold text-white transition ${style.button}`}
+                  >
+                    Login
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+
+                  <Link
+                    href={portal.registerHref}
+                    className="flex w-full items-center justify-center rounded-2xl border border-slate-200 px-5 py-3 font-semibold text-slate-700 transition hover:bg-slate-100"
+                  >
+                    Create Account
+                  </Link>
+                </div>
               </motion.div>
             );
           })}
