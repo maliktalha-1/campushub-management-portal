@@ -3,12 +3,18 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, MailCheck } from "lucide-react";
 import { useState } from "react";
+import { useAppDispatch } from "@/store/hooks";
+import { login } from "@/store/slices/authSlice";
+import { addNotification } from "@/store/slices/notificationSlice";
+
+type Role = "student" | "faculty" | "admin";
 
 export default function OTPVerificationForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const dispatch = useAppDispatch();
 
-  const role = searchParams.get("role") || "student";
+  const role = (searchParams.get("role") || "student") as Role;
   const mode = searchParams.get("mode") || "login";
 
   const [otp, setOtp] = useState("");
@@ -16,14 +22,41 @@ export default function OTPVerificationForm() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    const pendingUser = localStorage.getItem("pendingUser");
+
     if (mode === "forgot-password") {
+      dispatch(
+        addNotification({
+          message: "OTP verified. You can reset your password now.",
+          type: "success",
+        })
+      );
+
       router.push("/forgot-password");
       return;
     }
 
-    if (role === "admin") router.push("/admin/dashboard");
-    else if (role === "faculty") router.push("/faculty/dashboard");
-    else router.push("/student/dashboard");
+    if (pendingUser) {
+      dispatch(login(JSON.parse(pendingUser)));
+      localStorage.removeItem("pendingUser");
+    } else {
+      dispatch(
+        login({
+          name: role === "admin" ? "Administrator" : role === "faculty" ? "Faculty Member" : "Student User",
+          email: `${role}@campushub.edu`,
+          role,
+        })
+      );
+    }
+
+    dispatch(
+      addNotification({
+        message: "Login successful",
+        type: "success",
+      })
+    );
+
+    router.push(`/${role}/dashboard`);
   }
 
   return (
@@ -34,11 +67,9 @@ export default function OTPVerificationForm() {
         </div>
       </div>
 
-      <div className="text-center">
-        <p className="text-sm text-slate-600">
-          We sent a 6-digit verification code to your email.
-        </p>
-      </div>
+      <p className="text-center text-sm text-slate-600">
+        We sent a 6-digit verification code to your email.
+      </p>
 
       <div>
         <label className="mb-2 block text-sm font-semibold text-slate-700">
@@ -62,13 +93,6 @@ export default function OTPVerificationForm() {
         Verify OTP
         <ArrowRight className="ml-2 h-5 w-5" />
       </button>
-
-      <p className="text-center text-sm text-slate-600">
-        Didn&apos;t receive code?{" "}
-        <button type="button" className="font-semibold text-blue-600">
-          Resend
-        </button>
-      </p>
     </form>
   );
 }

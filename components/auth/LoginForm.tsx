@@ -24,6 +24,15 @@ export default function LoginForm({ role }: LoginFormProps) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    localStorage.setItem(
+      "pendingUser",
+      JSON.stringify({
+        name: roleLabels[role],
+        email: `${role}@campushub.edu`,
+        role,
+      })
+    );
+
     router.push(`/verify-otp?role=${role}`);
   }
 
@@ -95,7 +104,10 @@ export default function LoginForm({ role }: LoginFormProps) {
 
       <p className="text-center text-sm text-slate-600">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="font-semibold text-blue-600">
+        <Link
+          href={`/register?role=${role}`}
+          className="font-semibold text-blue-600"
+        >
           Create Account
         </Link>
       </p>
