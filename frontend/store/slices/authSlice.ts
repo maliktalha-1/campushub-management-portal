@@ -1,0 +1,52 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+type Role = "student" | "faculty" | "admin" | null;
+
+interface User {
+  name: string;
+  email: string;
+  role: Role;
+}
+
+interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+}
+
+const initialState: AuthState = {
+  isAuthenticated: false,
+  user: null,
+};
+
+const authSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    login: (state, action: PayloadAction<User>) => {
+      state.isAuthenticated = true;
+      state.user = action.payload;
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("campushub_user", JSON.stringify(action.payload));
+      }
+    },
+
+    restoreUser: (state, action: PayloadAction<User>) => {
+      state.isAuthenticated = true;
+      state.user = action.payload;
+    },
+
+    logout: (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("campushub_user");
+        localStorage.removeItem("pendingUser");
+      }
+    },
+  },
+});
+
+export const { login, restoreUser, logout } = authSlice.actions;
+export default authSlice.reducer;
