@@ -10,8 +10,11 @@ async function bootstrap() {
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
+      "https://campushub-management-portal-1qug4bejo-maliktalha-1s-projects.vercel.app",
     ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   });
 
   app.useGlobalPipes(
@@ -22,7 +25,6 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger Configuration
   const config = new DocumentBuilder()
     .setTitle("CampusHub API")
     .setDescription("CampusHub Management Portal Backend API")
