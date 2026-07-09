@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Role = "student" | "faculty" | "admin" | null;
+type Role = "student" | "faculty" | "admin" | "ADMIN" | "FACULTY" | "STUDENT" | null;
 
 interface User {
+  id?: number;
   name: string;
   email: string;
   role: Role;
@@ -18,22 +19,37 @@ const initialState: AuthState = {
   user: null,
 };
 
+const normalizeRole = (role: Role): Role => {
+  if (!role) return null;
+  return role.toLowerCase() as Role;
+};
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     login: (state, action: PayloadAction<User>) => {
+      const user = {
+        ...action.payload,
+        role: normalizeRole(action.payload.role),
+      };
+
       state.isAuthenticated = true;
-      state.user = action.payload;
+      state.user = user;
 
       if (typeof window !== "undefined") {
-        localStorage.setItem("campushub_user", JSON.stringify(action.payload));
+        localStorage.setItem("campushub_user", JSON.stringify(user));
       }
     },
 
     restoreUser: (state, action: PayloadAction<User>) => {
+      const user = {
+        ...action.payload,
+        role: normalizeRole(action.payload.role),
+      };
+
       state.isAuthenticated = true;
-      state.user = action.payload;
+      state.user = user;
     },
 
     logout: (state) => {
@@ -42,6 +58,7 @@ const authSlice = createSlice({
 
       if (typeof window !== "undefined") {
         localStorage.removeItem("campushub_user");
+        localStorage.removeItem("campushub_token");
         localStorage.removeItem("pendingUser");
       }
     },

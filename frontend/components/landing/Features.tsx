@@ -93,7 +93,7 @@ export default function Features() {
   return (
     <section
       id="features"
-      className="bg-slate-50 py-24"
+      className="bg-slate-50 dark:bg-slate-950 py-24"
     >
       <div className="mx-auto max-w-7xl px-6">
         {/* Heading */}
@@ -108,14 +108,14 @@ export default function Features() {
             Why Choose CampusHub
           </span>
 
-          <h2 className="mt-6 text-4xl font-bold text-slate-900">
+          <h2 className="mt-6 text-4xl font-bold text-slate-900 dark:text-white">
             Powerful Features for
             <span className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               Modern Universities
             </span>
           </h2>
 
-          <p className="mt-6 text-lg text-slate-600">
+          <p className="mt-6 text-lg text-slate-600 dark:text-slate-300">
             Everything administrators, faculty members, and students need—
             beautifully organized into one powerful platform.
           </p>
@@ -138,7 +138,7 @@ export default function Features() {
                 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
-                className={`group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-xl ${style.border}`}
+                className={`group rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-sm transition-all duration-300 hover:shadow-xl ${style.border}`}
               >
                 <div
                   className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl ${style.bg}`}
@@ -148,11 +148,11 @@ export default function Features() {
                   />
                 </div>
 
-                <h3 className="text-2xl font-bold text-slate-900">
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
                   {feature.title}
                 </h3>
 
-                <p className="mt-4 leading-7 text-slate-600">
+                <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
                   {feature.description}
                 </p>
 

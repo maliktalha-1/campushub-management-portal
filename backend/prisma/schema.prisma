@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Role {
+  ADMIN
+  FACULTY
+  STUDENT
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+}
+
+model User {
+  id       Int        @id @default(autoincrement())
+  name     String
+  email    String     @unique
+  password String
+  role     Role
+  status   UserStatus @default(ACTIVE)
+
+  resetToken        String?
+  resetTokenExpires DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  studentProfile StudentProfile?
+  facultyProfile FacultyProfile?
+}
+
+model Department {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  code      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses  Course[]
+  students StudentProfile[]
+  faculty  FacultyProfile[]
+}
+
+model Course {
+  id           Int      @id @default(autoincrement())
+  code         String   @unique
+  title        String
+  creditHours  Int
+  departmentId Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  department  Department         @relation(fields: [departmentId], references: [id])
+  assignments CourseAssignment[]
+  enrollments Enrollment[]
+}
+
+model StudentProfile {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  departmentId Int
+  studentId    String    @unique
+  semester     Int
+  phone        String?
+  address      String?
+  dateOfBirth  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user              User                   @relation(fields: [userId], references: [id])
+  department        Department             @relation(fields: [departmentId], references: [id])
+  submissions       AssignmentSubmission[]
+  attendanceRecords AttendanceRecord[]
+  enrollments       Enrollment[]
+}
+
+model Enrollment {
+  id               Int      @id @default(autoincrement())
+  studentProfileId Int
+  courseId         Int
+  enrolledAt       DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  studentProfile StudentProfile @relation(fields: [studentProfileId], references: [id])
+  course         Course         @relation(fields: [courseId], references: [id])
+
+  @@unique([studentProfileId, courseId])
+}
+
+model CourseAssignment {
+  id               Int      @id @default(autoincrement())
+  facultyProfileId Int
+  courseId         Int
+  semester         String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  facultyProfile    FacultyProfile     @relation(fields: [facultyProfileId], references: [id])
+  course            Course             @relation(fields: [courseId], references: [id])
+  assignments       Assignment[]
+  announcements     Announcement[]
+  attendanceRecords AttendanceRecord[]
+
+  @@unique([facultyProfileId, courseId])
+}
+
+model AttendanceRecord {
+  id                 Int              @id @default(autoincrement())
+  courseAssignmentId Int
+  studentProfileId   Int
+  date               DateTime
+  status             AttendanceStatus
+  remarks            String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  courseAssignment CourseAssignment @relation(fields: [courseAssignmentId], references: [id])
+  studentProfile   StudentProfile   @relation(fields: [studentProfileId], references: [id])
+
+  @@unique([courseAssignmentId, studentProfileId, date])
+}
+
+model Announcement {
+  id                 Int      @id @default(autoincrement())
+  courseAssignmentId Int
+  title              String
+  message            String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  courseAssignment CourseAssignment @relation(fields: [courseAssignmentId], references: [id])
+}
+
+model Assignment {
+  id                 Int      @id @default(autoincrement())
+  courseAssignmentId Int
+  title              String
+  instructions       String
+  dueDate            DateTime
+  attachmentUrl      String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  courseAssignment CourseAssignment       @relation(fields: [courseAssignmentId], references: [id])
+  submissions      AssignmentSubmission[]
+}
+
+model AssignmentSubmission {
+  id               Int      @id @default(autoincrement())
+  assignmentId     Int
+  studentProfileId Int
+  submissionUrl    String
+  comments         String?
+  grade            String?
+  feedback         String?
+  submittedAt      DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  assignment     Assignment     @relation(fields: [assignmentId], references: [id])
+  studentProfile StudentProfile @relation(fields: [studentProfileId], references: [id])
+
+  @@unique([assignmentId, studentProfileId])
+}
+
+model FacultyProfile {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  departmentId   Int
+  facultyId      String   @unique
+  designation    String
+  qualification  String?
+  phone          String?
+  officeLocation String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user        User               @relation(fields: [userId], references: [id])
+  department  Department         @relation(fields: [departmentId], references: [id])
+  assignments CourseAssignment[]
+}

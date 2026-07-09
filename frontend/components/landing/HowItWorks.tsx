@@ -44,7 +44,7 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="bg-white py-24"
+      className="bg-white dark:bg-slate-900 py-24"
     >
       <div className="mx-auto max-w-7xl px-6">
         {/* Heading */}
@@ -59,14 +59,14 @@ export default function HowItWorks() {
             Simple Workflow
           </span>
 
-          <h2 className="mt-6 text-4xl font-bold text-slate-900">
+          <h2 className="mt-6 text-4xl font-bold text-slate-900 dark:text-white">
             How CampusHub
             <span className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               Works
             </span>
           </h2>
 
-          <p className="mt-6 text-lg text-slate-600">
+          <p className="mt-6 text-lg text-slate-600 dark:text-slate-300">
             From login to managing your university, CampusHub keeps every
             academic activity organized in just a few simple steps.
           </p>
@@ -87,7 +87,7 @@ export default function HowItWorks() {
                   delay: index * 0.15,
                 }}
                 viewport={{ once: true }}
-                className="relative rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-blue-500 hover:shadow-xl"
+                className="relative rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-blue-500 hover:shadow-xl"
               >
                 {/* Number */}
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
@@ -100,12 +100,12 @@ export default function HowItWorks() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-2xl font-bold text-slate-900">
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
                   {step.title}
                 </h3>
 
                 {/* Description */}
-                <p className="mt-4 leading-7 text-slate-600">
+                <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
                   {step.description}
                 </p>
 

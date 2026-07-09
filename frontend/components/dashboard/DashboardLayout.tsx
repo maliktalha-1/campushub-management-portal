@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import { toast } from "sonner";
+import ThemeToggle from "@/components/theme/ThemeToggle";
+
 import {
   BarChart3,
   Bell,
@@ -15,7 +17,6 @@ import {
   LogOut,
   Menu,
   Search,
-  Settings,
   Shield,
   Upload,
   UserCheck,
@@ -23,6 +24,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 
@@ -57,6 +59,7 @@ const menus = {
     { label: "My Courses", href: "/student/courses", icon: BookOpen },
     { label: "Assignments", href: "/student/assignments", icon: ClipboardCheck },
     { label: "Submit Assignment", href: "/student/submit-assignment", icon: Upload },
+    { label: "Announcements", href: "/student/announcements", icon: Bell },
     { label: "Attendance", href: "/student/attendance", icon: UserCheck },
     { label: "Profile", href: "/student/profile", icon: Users },
   ],
@@ -75,6 +78,7 @@ const menus = {
     { label: "Departments", href: "/admin/departments", icon: Building2 },
     { label: "Courses", href: "/admin/courses", icon: BookOpen },
     { label: "Assign Faculty", href: "/admin/assign-faculty", icon: UserCheck },
+    { label: "Enroll Students", href: "/admin/enroll-students", icon: ClipboardCheck },
     { label: "User Accounts", href: "/admin/users", icon: Shield },
     { label: "Create User", href: "/admin/create-user", icon: UserCheck },
     { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
@@ -86,7 +90,10 @@ export default function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
   const pathname = usePathname();
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
@@ -94,26 +101,29 @@ export default function DashboardLayout({
   const info = roleInfo[role];
   const menu = menus[role];
 
-const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
-useEffect(() => {
-  setMounted(true);
-}, []);
+  const displayName = mounted && user?.name ? user.name : info.fallbackName;
 
-const displayName = mounted && user?.name ? user.name : info.fallbackName;
   function handleLogout() {
-    
-  toast.success("Logged out successfully.");
-  dispatch(logout());
-  localStorage.clear();
-  window.location.href = "/#portals";
-}
+    toast.success("Logged out successfully.");
+
+    dispatch(logout());
+    localStorage.clear();
+
+    setTimeout(() => {
+      router.push("/#portals");
+    }, 800);
+  }
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-950">
       <button
         onClick={() => setOpen(true)}
-        className="fixed left-4 top-4 z-50 rounded-xl bg-white p-3 shadow lg:hidden"
+        className="fixed left-4 top-4 z-50 rounded-xl bg-white dark:bg-slate-900 p-3 shadow dark:bg-slate-900 dark:text-white lg:hidden"
       >
         <Menu className="h-5 w-5" />
       </button>
@@ -141,7 +151,7 @@ const displayName = mounted && user?.name ? user.name : info.fallbackName;
             </button>
           </div>
 
-          <nav className="flex-1 space-y-2 px-4 py-6">
+          <nav className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
             {menu.map((item) => {
               const Icon = item.icon;
               const active = pathname === item.href;
@@ -153,7 +163,7 @@ const displayName = mounted && user?.name ? user.name : info.fallbackName;
                   onClick={() => setOpen(false)}
                   className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${
                     active
-                      ? "bg-white text-slate-950"
+                      ? "bg-white dark:bg-slate-900 text-slate-950"
                       : "text-slate-300 hover:bg-slate-800 hover:text-white"
                   }`}
                 >
@@ -177,34 +187,32 @@ const displayName = mounted && user?.name ? user.name : info.fallbackName;
       </aside>
 
       <main className="lg:pl-72">
-        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/80 backdrop-blur-xl">
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white dark:bg-slate-900/80 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/80">
           <div className="flex h-20 items-center justify-between px-6 lg:px-10">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900">
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white dark:text-white">
                 {info.title}
               </h2>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-400">
                 Welcome back, {displayName}
               </p>
             </div>
 
             <div className="hidden items-center gap-4 md:flex">
-              <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+              <div className="flex items-center gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 dark:border-slate-700 dark:bg-slate-900">
                 <Search className="h-5 w-5 text-slate-400" />
                 <input
                   placeholder="Search..."
-                  className="w-56 bg-transparent text-sm outline-none"
+                  className="w-56 bg-transparent text-sm text-slate-900 dark:text-white outline-none placeholder:text-slate-400 dark:text-white"
                 />
               </div>
 
-              <button className="relative rounded-2xl border border-slate-200 bg-white p-3">
-                <Bell className="h-5 w-5 text-slate-600" />
+              <button className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 dark:border-slate-700 dark:bg-slate-900">
+                <Bell className="h-5 w-5 text-slate-600 dark:text-slate-300 dark:text-slate-300" />
                 <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
               </button>
 
-              <button className="rounded-2xl border border-slate-200 bg-white p-3">
-                <Settings className="h-5 w-5 text-slate-600" />
-              </button>
+              <ThemeToggle />
             </div>
           </div>
         </header>

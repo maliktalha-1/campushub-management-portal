@@ -77,7 +77,7 @@ const colors = {
 
 export default function PortalSelection() {
   return (
-    <section id="portals" className="bg-slate-50 py-24">
+    <section id="portals" className="bg-slate-50 dark:bg-slate-950 py-24">
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 25 }}
@@ -89,14 +89,14 @@ export default function PortalSelection() {
             Choose Your Portal
           </span>
 
-          <h2 className="mt-6 text-4xl font-bold text-slate-900">
+          <h2 className="mt-6 text-4xl font-bold text-slate-900 dark:text-white">
             One Platform,
             <span className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               Three Experiences
             </span>
           </h2>
 
-          <p className="mt-6 text-lg text-slate-600">
+          <p className="mt-6 text-lg text-slate-600 dark:text-slate-300">
             Select your role to access a personalized dashboard designed for
             your responsibilities.
           </p>
@@ -115,7 +115,7 @@ export default function PortalSelection() {
                 transition={{ delay: index * 0.15 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
-                className={`rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-2xl ${style.hover}`}
+                className={`rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-sm transition-all duration-300 hover:shadow-2xl ${style.hover}`}
               >
                 <div
                   className={`mb-6 flex h-20 w-20 items-center justify-center rounded-3xl ${style.bg}`}
@@ -123,11 +123,11 @@ export default function PortalSelection() {
                   <Icon className={`h-10 w-10 ${style.text}`} />
                 </div>
 
-                <h3 className="text-3xl font-bold text-slate-900">
+                <h3 className="text-3xl font-bold text-slate-900 dark:text-white">
                   {portal.title}
                 </h3>
 
-                <p className="mt-2 text-slate-600">{portal.subtitle}</p>
+                <p className="mt-2 text-slate-600 dark:text-slate-300">{portal.subtitle}</p>
 
                 <div className="mt-8 space-y-4">
                   {portal.features.map((feature) => {

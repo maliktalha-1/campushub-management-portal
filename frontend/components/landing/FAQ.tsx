@@ -36,18 +36,18 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-white py-24">
+    <section id="faq" className="bg-white dark:bg-slate-900 py-24">
       <div className="mx-auto max-w-4xl px-6">
         <div className="mb-16 text-center">
           <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
             Frequently Asked Questions
           </span>
 
-          <h2 className="mt-6 text-4xl font-bold text-slate-900">
+          <h2 className="mt-6 text-4xl font-bold text-slate-900 dark:text-white">
             Got Questions?
           </h2>
 
-          <p className="mt-5 text-lg text-slate-600">
+          <p className="mt-5 text-lg text-slate-600 dark:text-slate-300">
             Everything you need to know about CampusHub.
           </p>
         </div>
@@ -57,7 +57,7 @@ export default function FAQ() {
             <motion.div
               key={faq.question}
               whileHover={{ scale: 1.01 }}
-              className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50"
+              className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950"
             >
               <button
                 onClick={() =>
@@ -65,7 +65,7 @@ export default function FAQ() {
                 }
                 className="flex w-full items-center justify-between p-6 text-left"
               >
-                <h3 className="text-lg font-semibold text-slate-900">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                   {faq.question}
                 </h3>
 
@@ -84,7 +84,7 @@ export default function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <p className="px-6 pb-6 text-slate-600 leading-7">
+                    <p className="px-6 pb-6 text-slate-600 dark:text-slate-300 leading-7">
                       {faq.answer}
                     </p>
                   </motion.div>

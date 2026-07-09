@@ -23,12 +23,12 @@ export default function StatCard({
   color = "blue",
 }: StatCardProps) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+    <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-500">{title}</p>
-          <h3 className="mt-3 text-4xl font-bold text-slate-900">{value}</h3>
-          <p className="mt-3 text-sm text-slate-500">{description}</p>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
+          <h3 className="mt-3 text-4xl font-bold text-slate-900 dark:text-white">{value}</h3>
+          <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">{description}</p>
         </div>
 
         <div className={`rounded-2xl p-3 ${colors[color]}`}>
